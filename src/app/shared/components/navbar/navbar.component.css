@@ -1,0 +1,15 @@
+.site-navbar {
+  position: fixed;
+  top: 0;
+  inset-inline: 0;
+  z-index: 1000;
+  isolation: isolate;
+  width: 100%;
+  background: #fff;
+}
+
+:host {
+  display: block;
+  flex: 0 0 auto;
+}
+

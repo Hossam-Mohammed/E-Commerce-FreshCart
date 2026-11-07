@@ -1,0 +1,101 @@
+<div
+  class="relative w-full overflow-hidden shadow-sm"
+  (mouseenter)="stopAutoPlay()"
+  (mouseleave)="startAutoPlay()"
+>
+  <!-- Slides Container -->
+  <div class="relative h-[360px] sm:h-[420px] md:h-[460px] w-full">
+    @for (slide of slides; track $index) {
+      <div
+        class="absolute inset-0 transition-opacity duration-700 ease-in-out flex items-center"
+        [class.opacity-100]="$index === currentSlide()"
+        [class.opacity-0]="$index !== currentSlide()"
+        [class.pointer-events-none]="$index !== currentSlide()"
+        [class.z-10]="$index === currentSlide()"
+        [class.z-0]="$index !== currentSlide()"
+      >
+        <!-- Slide Background Image + Gradient Overlay -->
+        <div
+          class="absolute inset-0 bg-cover bg-center"
+          [style.background-image]="'url(' + slide.image + ')'"
+        ></div>
+        <div
+          class="absolute inset-0 bg-gradient-to-r from-emerald-900/90 via-emerald-700/80 to-transparent sm:to-emerald-600/30"
+        ></div>
+
+        <!-- Slide Content -->
+        <div class="relative z-20 max-w-2xl px-6 sm:px-12 md:px-16 text-white space-y-4">
+          @if (slide.badge) {
+            <span
+              class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/20 backdrop-blur-md text-emerald-100 border border-white/20"
+            >
+              <i class="fa-solid fa-leaf text-[11px] text-emerald-300"></i>
+              {{ slide.badge }}
+            </span>
+          }
+          <h1
+            class="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-tight drop-shadow-xs"
+          >
+            {{ slide.title }}
+          </h1>
+          <p class="text-base sm:text-lg text-emerald-50/90 font-medium max-w-lg drop-shadow-2xs">
+            {{ slide.subtitle }}
+          </p>
+
+          <!-- CTA Buttons -->
+          <div class="flex items-center gap-3 pt-2">
+            <a
+              [routerLink]="slide.buttonLink"
+              class="px-6 sm:px-8 py-3 rounded-full bg-white text-emerald-700 hover:bg-emerald-50 font-bold text-sm sm:text-base shadow-md hover:shadow-lg transition-all active:scale-95 inline-flex items-center gap-2"
+            >
+              <span>{{ slide.buttonText }}</span>
+              <i class="fa-solid fa-arrow-right text-xs"></i>
+            </a>
+            <a
+              routerLink="/shop"
+              class="px-6 sm:px-8 py-3 rounded-full bg-transparent hover:bg-white/10 text-white font-bold text-sm sm:text-base border border-white/80 transition-all active:scale-95"
+            >
+              View Deals
+            </a>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Left Arrow Navigation -->
+  <button
+    type="button"
+    (click)="prev()"
+    class="absolute left-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white hover:bg-gray-50 text-emerald-600 shadow-md flex items-center justify-center transition-all active:scale-90 cursor-pointer"
+    aria-label="Previous slide"
+  >
+    <i class="fa-solid fa-chevron-left text-sm sm:text-base"></i>
+  </button>
+
+  <!-- Right Arrow Navigation -->
+  <button
+    type="button"
+    (click)="next()"
+    class="absolute right-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white hover:bg-gray-50 text-emerald-600 shadow-md flex items-center justify-center transition-all active:scale-90 cursor-pointer"
+    aria-label="Next slide"
+  >
+    <i class="fa-solid fa-chevron-right text-sm sm:text-base"></i>
+  </button>
+
+  <!-- Dots Navigation Indicator -->
+  <div class="absolute bottom-5 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2">
+    @for (slide of slides; track $index) {
+      <button
+        type="button"
+        (click)="goTo($index)"
+        class="h-2.5 rounded-full transition-all duration-300 cursor-pointer"
+        [class.w-7]="$index === currentSlide()"
+        [class.w-2.5]="$index !== currentSlide()"
+        [class.bg-white]="$index === currentSlide()"
+        [class.bg-white/50]="$index !== currentSlide()"
+        [attr.aria-label]="'Go to slide ' + ($index + 1)"
+      ></button>
+    }
+  </div>
+</div>

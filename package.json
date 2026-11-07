@@ -20,8 +20,15 @@
     "@angular/platform-server": "^22.2.0",
     "@angular/router": "^22.2.0",
     "@angular/ssr": "^22.2.3",
+    "@fortawesome/fontawesome-free": "^7.3.1",
     "express": "^5.1.0",
+    "flowbite": "^4.0.2",
+    "jwt-decode": "^4.0.0",
+    "ngx-cookie-service": "^22.0.0",
+    "ngx-owl-carousel-o": "^22.0.0",
+    "ngx-toastr": "^20.0.5",
     "rxjs": "~7.8.0",
+    "swiper": "^14.3.0",
     "tslib": "^2.3.0"
   },
   "devDependencies": {

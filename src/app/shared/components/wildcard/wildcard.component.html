@@ -1,0 +1,53 @@
+<section class="relative isolate flex min-h-[min(820px,calc(100vh-180px))] items-center justify-center overflow-hidden bg-gradient-to-br from-white via-slate-50 to-emerald-50/50 px-4 py-12 sm:px-6" aria-labelledby="not-found-title">
+  <!-- Quiet grocery themed decoration -->
+  <div class="pointer-events-none absolute inset-0 overflow-hidden text-emerald-300/35" aria-hidden="true">
+    <i class="fa-solid fa-apple-whole absolute left-[6%] top-[12%] rotate-12 text-3xl"></i>
+    <i class="fa-solid fa-carrot absolute right-[11%] top-[25%] -rotate-12 text-3xl"></i>
+    <i class="fa-solid fa-lemon absolute bottom-[20%] left-[9%] -rotate-12 text-3xl"></i>
+    <i class="fa-solid fa-seedling absolute bottom-[11%] right-[15%] rotate-12 text-4xl"></i>
+    <i class="fa-solid fa-carrot absolute right-[6%] bottom-[43%] rotate-12 text-2xl opacity-60"></i>
+    <span class="absolute left-1/2 top-12 h-64 w-64 -translate-x-1/2 rounded-full bg-emerald-100/30 blur-3xl"></span>
+  </div>
+
+  <div class="relative z-10 mx-auto flex w-full max-w-3xl flex-col items-center text-center">
+    <!-- Cart illustration -->
+    <div class="relative mb-7 flex h-52 w-64 items-center justify-center sm:mb-8 sm:h-60 sm:w-72" role="img" aria-label="Shopping cart with a 404 error badge">
+      <div class="flex h-40 w-52 items-center justify-center rounded-[2rem] border border-white/80 bg-white/70 text-emerald-400 shadow-[0_20px_55px_rgba(16,84,57,0.10)] backdrop-blur-sm sm:h-48 sm:w-60">
+        <i class="fa-solid fa-cart-shopping text-6xl sm:text-7xl"></i>
+      </div>
+      <div class="absolute right-0 top-0 flex h-24 w-24 items-center justify-center rounded-full border-[7px] border-white bg-gradient-to-br from-emerald-500 to-green-600 text-3xl font-black text-white shadow-lg shadow-emerald-900/20 sm:right-1 sm:h-28 sm:w-28 sm:text-4xl">404</div>
+      <div class="absolute -bottom-1 flex items-center gap-3 text-emerald-400" aria-hidden="true">
+        <span class="h-3 w-3 rounded-full bg-current"></span>
+        <span class="h-4 w-9 rounded-b-full border-b-2 border-current"></span>
+        <span class="h-3 w-3 rounded-full bg-current"></span>
+      </div>
+    </div>
+
+    <p class="mb-2 text-xs font-bold uppercase tracking-[0.2em] text-emerald-600">Error 404</p>
+    <h1 id="not-found-title" class="text-3xl font-black tracking-tight text-slate-950 sm:text-4xl md:text-5xl">Oops! Nothing Here</h1>
+    <p class="mt-4 max-w-lg text-base leading-7 text-slate-600 sm:text-lg sm:leading-8">
+      Looks like this page went out of stock! Don't worry,<br class="hidden sm:block" /> there's plenty more fresh content to explore.
+    </p>
+
+    <div class="mt-8 flex w-full flex-col justify-center gap-3 sm:w-auto sm:flex-row sm:gap-4">
+      <a routerLink="/home" class="inline-flex min-h-14 items-center justify-center gap-3 rounded-2xl border border-emerald-700 bg-emerald-600 px-7 text-base font-bold text-white shadow-lg shadow-emerald-700/20 transition hover:-translate-y-0.5 hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300">
+        <i class="fa-solid fa-house"></i>
+        <span>Go to Homepage</span>
+      </a>
+      <button type="button" (click)="goBack()" class="inline-flex min-h-14 items-center justify-center gap-3 rounded-2xl border border-slate-200 bg-white px-7 text-base font-bold text-slate-800 shadow-md shadow-slate-900/5 transition hover:-translate-y-0.5 hover:border-slate-300 hover:bg-slate-50 focus:outline-none focus:ring-4 focus:ring-slate-200">
+        <i class="fa-solid fa-arrow-left"></i>
+        <span>Go Back</span>
+      </button>
+    </div>
+
+    <nav class="mt-10 w-full max-w-xl rounded-3xl border border-slate-100 bg-white/90 p-5 shadow-lg shadow-slate-900/5 backdrop-blur sm:mt-12 sm:p-6" aria-label="Popular destinations">
+      <p class="mb-4 text-xs font-semibold uppercase tracking-wider text-slate-500">Popular Destinations</p>
+      <div class="flex flex-wrap justify-center gap-2.5">
+        <a routerLink="/all-products" class="rounded-xl bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-100 focus:outline-none focus:ring-2 focus:ring-emerald-400">All Products</a>
+        <a routerLink="/categories" class="rounded-xl bg-slate-100 px-4 py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-400">Categories</a>
+        <a routerLink="/shop" class="rounded-xl bg-slate-100 px-4 py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-400">Today's Deals</a>
+        <a href="mailto:support@freshcart.com" class="rounded-xl bg-slate-100 px-4 py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-400">Contact Us</a>
+      </div>
+    </nav>
+  </div>
+</section>

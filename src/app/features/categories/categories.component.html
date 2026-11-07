@@ -1,0 +1,130 @@
+<section class="min-h-screen bg-white font-sans">
+
+  <!-- Header Banner (Green matching Figma) -->
+  <div class="bg-gradient-to-r from-emerald-500 to-emerald-700 text-white py-10 sm:py-14 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+      <!-- Breadcrumb inside banner -->
+      <nav class="flex items-center gap-2 text-xs text-emerald-100 mb-4" aria-label="Breadcrumb">
+        <a routerLink="/home" class="hover:text-white transition-colors">Home</a>
+        <span class="text-emerald-200">/</span>
+        <span class="text-white font-semibold">Categories</span>
+      </nav>
+
+      <div class="flex items-center gap-4">
+        <div class="w-12 h-12 rounded-full bg-white/20 backdrop-blur flex items-center justify-center shrink-0">
+          <i class="fa-solid fa-shapes text-xl text-white"></i>
+        </div>
+        <div>
+          <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight">All Categories</h1>
+          <p class="text-sm text-emerald-100/90 mt-0.5">Browse our wide range of product categories</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+
+    <!-- Loading Skeleton -->
+    @if (isLoading()) {
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
+      @for (i of [1,2,3,4,5,6,7,8,9,10]; track i) {
+      <div class="bg-gray-50 rounded-2xl overflow-hidden animate-pulse">
+        <div class="w-full aspect-[4/3] bg-gray-200"></div>
+        <div class="p-4 space-y-2">
+          <div class="h-4 bg-gray-200 rounded w-3/4 mx-auto"></div>
+          <div class="h-3 bg-gray-200 rounded w-1/2 mx-auto"></div>
+        </div>
+      </div>
+      }
+    </div>
+    }
+
+    <!-- Categories Grid (image cards matching Figma) -->
+    @else {
+    @if (hasError()) {
+      <div class="rounded-2xl border border-red-100 bg-red-50 px-5 py-8 text-center">
+        <p class="text-sm font-semibold text-gray-800">We couldn't load categories.</p>
+        <button type="button" (click)="loadCategories()" class="mt-3 rounded-lg bg-emerald-600 px-4 py-2 text-xs font-bold text-white hover:bg-emerald-700">Try again</button>
+      </div>
+    } @else if (categories().length === 0) {
+      <div class="rounded-2xl border border-gray-100 bg-gray-50 px-5 py-12 text-center">
+        <i class="fa-solid fa-shapes text-2xl text-gray-300"></i>
+        <p class="mt-3 text-sm font-semibold text-gray-700">No categories available yet.</p>
+        <p class="mt-1 text-xs text-gray-500">Please check back soon.</p>
+      </div>
+    } @else {
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-5">
+      @for (category of categories(); track category._id) {
+      <a
+        [routerLink]="['/shop']"
+        [queryParams]="{ category: category._id }"
+        class="group bg-white rounded-2xl border border-gray-100 hover:border-emerald-200 hover:shadow-lg transition-all duration-200 overflow-hidden cursor-pointer flex flex-col"
+      >
+        <!-- Category Image (full-width, 4:3 ratio) -->
+        <div class="relative w-full overflow-hidden bg-gray-50" style="aspect-ratio: 4/3">
+          <img
+            [src]="category.image"
+            [alt]="category.name"
+            loading="lazy"
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          />
+        </div>
+
+        <!-- Category Name + Sub-label -->
+        <div class="p-3 sm:p-4 text-center flex flex-col gap-0.5">
+          <h3 class="text-xs sm:text-sm font-bold text-gray-900 group-hover:text-emerald-600 transition-colors leading-tight">
+            {{ category.name }}
+          </h3>
+          <span class="text-[10px] sm:text-xs text-emerald-600 font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+            Explore Products →
+          </span>
+        </div>
+      </a>
+      }
+    </div>
+    }
+    }
+
+    <!-- Feature Badges Bar -->
+    <div class="mt-14 pt-8 border-t border-gray-100 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+          <i class="fa-solid fa-truck text-sm"></i>
+        </div>
+        <div>
+          <h4 class="text-xs font-bold text-gray-900">Free Shipping</h4>
+          <p class="text-[11px] text-gray-400">On orders over 500 EGP</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+          <i class="fa-solid fa-rotate-left text-sm"></i>
+        </div>
+        <div>
+          <h4 class="text-xs font-bold text-gray-900">Easy Returns</h4>
+          <p class="text-[11px] text-gray-400">14-day return policy</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+          <i class="fa-solid fa-shield-halved text-sm"></i>
+        </div>
+        <div>
+          <h4 class="text-xs font-bold text-gray-900">Secure Payment</h4>
+          <p class="text-[11px] text-gray-400">100% secure checkout</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+          <i class="fa-solid fa-headset text-sm"></i>
+        </div>
+        <div>
+          <h4 class="text-xs font-bold text-gray-900">24/7 Support</h4>
+          <p class="text-[11px] text-gray-400">Dedicated help team</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>

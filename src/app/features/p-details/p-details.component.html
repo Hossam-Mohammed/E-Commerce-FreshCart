@@ -1,0 +1,401 @@
+@if (p_details()._id) {
+<section class="min-h-screen bg-gray-50/50 py-6 sm:py-10 px-4 sm:px-6 lg:px-8 font-sans">
+  <div class="max-w-7xl mx-auto space-y-8">
+
+    <!-- Breadcrumb Navigation -->
+    <nav class="flex items-center gap-2 text-xs sm:text-sm text-gray-500" aria-label="Breadcrumb">
+      <a routerLink="/home" class="hover:text-emerald-600 transition-colors flex items-center gap-1">
+        <i class="fa-solid fa-house text-xs"></i>
+        <span>Home</span>
+      </a>
+      <i class="fa-solid fa-chevron-right text-[10px] text-gray-300"></i>
+      <a [routerLink]="['/shop']" [queryParams]="{category: p_details().category?._id}" class="hover:text-emerald-600 transition-colors">
+        {{ p_details().category?.name || 'Category' }}
+      </a>
+      <i class="fa-solid fa-chevron-right text-[10px] text-gray-300"></i>
+      <span class="font-semibold text-gray-900 truncate max-w-xs sm:max-w-md">
+        {{ p_details().title }}
+      </span>
+    </nav>
+
+    <!-- Main Product Card -->
+    <div class="bg-white rounded-3xl border border-gray-100 shadow-xs p-5 sm:p-8 lg:p-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-start">
+
+        <!-- Left Column: Image Gallery -->
+        <div class="lg:col-span-5 space-y-4">
+          <!-- Main Image -->
+          <div class="w-full aspect-square bg-gray-50/60 rounded-2xl border border-gray-100 p-6 flex items-center justify-center overflow-hidden group relative">
+            <img [src]="activeImage() || p_details().imageCover" [alt]="p_details().title"
+              class="max-h-full max-w-full object-contain mix-blend-multiply transition-transform duration-300 group-hover:scale-105" />
+          </div>
+
+          <!-- Thumbnails Row -->
+          @if (p_details().images && p_details().images.length > 0) {
+          <div class="flex items-center gap-3 overflow-x-auto pb-2 scrollbar-thin">
+            <button type="button" (click)="selectImage(p_details().imageCover)"
+              class="w-16 h-16 sm:w-20 sm:h-20 rounded-xl p-1 bg-gray-50 border transition-all cursor-pointer shrink-0 flex items-center justify-center"
+              [class.border-emerald-600]="activeImage() === p_details().imageCover"
+              [class.ring-2]="activeImage() === p_details().imageCover"
+              [class.ring-emerald-500/20]="activeImage() === p_details().imageCover"
+              [class.border-gray-200]="activeImage() !== p_details().imageCover">
+              <img [src]="p_details().imageCover" [alt]="p_details().title" class="w-full h-full object-contain mix-blend-multiply" />
+            </button>
+
+            @for (img of p_details().images; track $index) {
+            <button type="button" (click)="selectImage(img)"
+              class="w-16 h-16 sm:w-20 sm:h-20 rounded-xl p-1 bg-gray-50 border transition-all cursor-pointer shrink-0 flex items-center justify-center"
+              [class.border-emerald-600]="activeImage() === img"
+              [class.ring-2]="activeImage() === img"
+              [class.ring-emerald-500/20]="activeImage() === img"
+              [class.border-gray-200]="activeImage() !== img">
+              <img [src]="img" [alt]="p_details().title" class="w-full h-full object-contain mix-blend-multiply" />
+            </button>
+            }
+          </div>
+          }
+        </div>
+
+        <!-- Right Column: Product Info & Actions -->
+        <div class="lg:col-span-7 space-y-5">
+          <!-- Category & Brand Tags -->
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">
+              {{ p_details().category?.name }}
+            </span>
+            @if (p_details().brand?.name) {
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-700 border border-gray-200">
+              {{ p_details().brand?.name }}
+            </span>
+            }
+          </div>
+
+          <!-- Product Title -->
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight leading-tight">
+            {{ p_details().title }}
+          </h1>
+
+          <!-- Rating & Stock Badge -->
+          <div class="flex flex-wrap items-center gap-4">
+            <div class="flex items-center gap-1.5">
+              <div class="flex items-center text-amber-400 text-xs gap-0.5">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star-half-stroke"></i>
+              </div>
+              <span class="text-xs font-semibold text-gray-600">
+                {{ p_details().ratingsAverage }} ({{ p_details().ratingsQuantity || 18 }} reviews)
+              </span>
+            </div>
+
+            <span class="h-3.5 w-px bg-gray-200"></span>
+
+            <span class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              In Stock
+            </span>
+          </div>
+
+          <!-- Price Display -->
+          <div class="flex items-baseline gap-2 pt-1">
+            <span class="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight">
+              {{ p_details().price }}
+            </span>
+            <span class="text-base font-bold text-gray-500">EGP</span>
+          </div>
+
+          <!-- Description Preview -->
+          <p class="text-sm text-gray-600 leading-relaxed pt-1">
+            {{ p_details().description }}
+          </p>
+
+          <!-- Quantity Selector -->
+          <div class="space-y-2 pt-2">
+            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider">Quantity</label>
+            <div class="flex items-center gap-4">
+              <!-- Counter Box -->
+              <div class="inline-flex items-center border border-gray-200 rounded-xl bg-gray-50/70 p-1">
+                <button type="button" (click)="decreaseQty()"
+                  class="w-9 h-9 rounded-lg bg-white shadow-2xs flex items-center justify-center text-gray-600 hover:text-emerald-600 hover:bg-emerald-50 transition-colors cursor-pointer"
+                  aria-label="Decrease quantity">
+                  <i class="fa-solid fa-minus text-xs"></i>
+                </button>
+                <span class="w-12 text-center font-bold text-sm text-gray-900 select-none">
+                  {{ quantity() }}
+                </span>
+                <button type="button" (click)="increaseQty()"
+                  class="w-9 h-9 rounded-lg bg-white shadow-2xs flex items-center justify-center text-gray-600 hover:text-emerald-600 hover:bg-emerald-50 transition-colors cursor-pointer"
+                  aria-label="Increase quantity">
+                  <i class="fa-solid fa-plus text-xs"></i>
+                </button>
+              </div>
+
+              <!-- Available Stock -->
+              <span class="text-xs font-medium text-gray-400">
+                {{ p_details().quantity || 120 }} available
+              </span>
+            </div>
+          </div>
+
+          <!-- Live Total Price Card -->
+          <div class="bg-gray-50 rounded-2xl p-4 flex items-center justify-between border border-gray-100">
+            <span class="text-sm font-semibold text-gray-700">Total Price:</span>
+            <span class="text-xl font-bold text-emerald-600">
+              {{ p_details().price * quantity() }}.00 EGP
+            </span>
+          </div>
+
+          <!-- Action Buttons: Add to Cart & Buy Now -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+            <button type="button" (click)="addToCart()"
+              class="w-full bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white font-bold py-3.5 px-6 rounded-2xl flex items-center justify-center gap-2.5 shadow-sm hover:shadow-md transition-all cursor-pointer">
+              <i class="fa-solid fa-cart-shopping text-sm"></i>
+              <span>Add to Cart</span>
+            </button>
+
+            <button type="button" (click)="buyNow()"
+              class="w-full bg-slate-900 hover:bg-slate-800 active:scale-[0.99] text-white font-bold py-3.5 px-6 rounded-2xl flex items-center justify-center gap-2 transition-all cursor-pointer">
+              <span>Buy Now</span>
+            </button>
+          </div>
+
+          <!-- Wishlist & Share Secondary Actions -->
+          <div class="flex items-center gap-3 pt-1">
+            <button type="button" (click)="toggleWishlist()"
+              class="flex-1 py-2.5 px-4 rounded-xl border border-gray-200 hover:bg-gray-50 text-gray-700 font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 transition-colors cursor-pointer">
+              <i class="fa-heart text-sm"
+                [class.fa-solid]="isWishlisted()"
+                [class.text-red-500]="isWishlisted()"
+                [class.fa-regular]="!isWishlisted()"
+                [class.text-gray-400]="!isWishlisted()"></i>
+              <span>{{ isWishlisted() ? 'In Wishlist' : 'Add to Wishlist' }}</span>
+            </button>
+
+            <button type="button" (click)="shareProduct()"
+              class="w-11 h-11 rounded-xl border border-gray-200 hover:bg-gray-50 text-gray-600 hover:text-gray-900 flex items-center justify-center transition-colors cursor-pointer shrink-0"
+              title="Share product">
+              <i class="fa-solid fa-share-nodes text-sm"></i>
+            </button>
+          </div>
+
+          <!-- Trust / Benefit Badges (3 Badges) -->
+          <div class="grid grid-cols-3 gap-3 pt-4 border-t border-gray-100">
+            <div class="flex items-center gap-2.5 p-2 rounded-xl bg-gray-50/70">
+              <i class="fa-solid fa-truck text-emerald-600 text-sm"></i>
+              <div class="min-w-0">
+                <div class="text-[11px] font-bold text-gray-900 truncate">Free Delivery</div>
+                <div class="text-[10px] text-gray-400">Over 500 EGP</div>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2.5 p-2 rounded-xl bg-gray-50/70">
+              <i class="fa-solid fa-rotate-left text-emerald-600 text-sm"></i>
+              <div class="min-w-0">
+                <div class="text-[11px] font-bold text-gray-900 truncate">30 Days Return</div>
+                <div class="text-[10px] text-gray-400">Money back</div>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2.5 p-2 rounded-xl bg-gray-50/70">
+              <i class="fa-solid fa-shield-halved text-emerald-600 text-sm"></i>
+              <div class="min-w-0">
+                <div class="text-[11px] font-bold text-gray-900 truncate">Secure Payment</div>
+                <div class="text-[10px] text-gray-400">100% Protected</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Product Information Tabs -->
+      <div class="mt-12 pt-8 border-t border-gray-100">
+        <!-- Tabs Header -->
+        <div class="flex items-center gap-8 border-b border-gray-200 text-sm font-bold">
+          <button type="button" (click)="activeTab.set('details')"
+            class="pb-3 transition-colors cursor-pointer relative"
+            [class.text-emerald-600]="activeTab() === 'details'"
+            [class.text-gray-500]="activeTab() !== 'details'">
+            Product Details
+            @if (activeTab() === 'details') {
+            <span class="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-600 rounded-full"></span>
+            }
+          </button>
+
+          <button type="button" (click)="activeTab.set('reviews')"
+            class="pb-3 transition-colors cursor-pointer relative"
+            [class.text-emerald-600]="activeTab() === 'reviews'"
+            [class.text-gray-500]="activeTab() !== 'reviews'">
+            Reviews ({{ p_details().ratingsQuantity || 18 }})
+            @if (activeTab() === 'reviews') {
+            <span class="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-600 rounded-full"></span>
+            }
+          </button>
+
+          <button type="button" (click)="activeTab.set('shipping')"
+            class="pb-3 transition-colors cursor-pointer relative"
+            [class.text-emerald-600]="activeTab() === 'shipping'"
+            [class.text-gray-500]="activeTab() !== 'shipping'">
+            Shipping & Returns
+            @if (activeTab() === 'shipping') {
+            <span class="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-600 rounded-full"></span>
+            }
+          </button>
+        </div>
+
+        <!-- Tab 1: Product Details Content -->
+        @if (activeTab() === 'details') {
+        <div class="py-6 space-y-6 text-sm">
+          <div>
+            <h3 class="text-base font-bold text-gray-900 mb-2">About this Product</h3>
+            <p class="text-gray-600 leading-relaxed">
+              {{ p_details().description }}
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Product Information Table -->
+            <div>
+              <h4 class="text-sm font-bold text-gray-900 mb-3">Product Information</h4>
+              <div class="border border-gray-100 rounded-2xl overflow-hidden divide-y divide-gray-100">
+                <div class="flex items-center justify-between px-4 py-2.5 bg-gray-50 text-xs">
+                  <span class="text-gray-500 font-medium">Category</span>
+                  <span class="font-bold text-gray-900">{{ p_details().category?.name }}</span>
+                </div>
+                <div class="flex items-center justify-between px-4 py-2.5 text-xs">
+                  <span class="text-gray-500 font-medium">Subcategory</span>
+                  <span class="font-bold text-gray-900">{{ p_details().subcategory?.[0]?.name || p_details().category?.name }}</span>
+                </div>
+                <div class="flex items-center justify-between px-4 py-2.5 bg-gray-50 text-xs">
+                  <span class="text-gray-500 font-medium">Brand</span>
+                  <span class="font-bold text-gray-900">{{ p_details().brand?.name || 'FreshCart' }}</span>
+                </div>
+                <div class="flex items-center justify-between px-4 py-2.5 text-xs">
+                  <span class="text-gray-500 font-medium">Items Sold</span>
+                  <span class="font-bold text-emerald-600">320+ sold</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Key Features Checklist -->
+            <div>
+              <h4 class="text-sm font-bold text-gray-900 mb-3">Key Features</h4>
+              <ul class="space-y-2.5 text-xs text-gray-700">
+                <li class="flex items-center gap-2.5">
+                  <i class="fa-solid fa-circle-check text-emerald-600 text-sm"></i>
+                  <span>Premium Quality Product sourced with care</span>
+                </li>
+                <li class="flex items-center gap-2.5">
+                  <i class="fa-solid fa-circle-check text-emerald-600 text-sm"></i>
+                  <span>100% Authentic Guarantee</span>
+                </li>
+                <li class="flex items-center gap-2.5">
+                  <i class="fa-solid fa-circle-check text-emerald-600 text-sm"></i>
+                  <span>Fast & Secure Temperature-Controlled Packaging</span>
+                </li>
+                <li class="flex items-center gap-2.5">
+                  <i class="fa-solid fa-circle-check text-emerald-600 text-sm"></i>
+                  <span>Quality Tested and Handpicked Daily</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        }
+
+        <!-- Tab 2: Reviews Content -->
+        @if (activeTab() === 'reviews') {
+        <div class="py-6 space-y-4">
+          <div class="flex items-center gap-4 bg-emerald-50/50 p-4 rounded-2xl border border-emerald-100 max-w-sm">
+            <span class="text-3xl font-extrabold text-emerald-700">{{ p_details().ratingsAverage }}</span>
+            <div>
+              <div class="flex text-amber-400 text-xs gap-0.5">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star-half-stroke"></i>
+              </div>
+              <p class="text-xs text-gray-500 mt-0.5">Based on {{ p_details().ratingsQuantity || 18 }} verified customer ratings</p>
+            </div>
+          </div>
+
+          <div class="space-y-3 pt-2">
+            <div class="p-4 rounded-2xl border border-gray-100 space-y-1.5 text-xs">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-gray-900">Nour El-Din</span>
+                <span class="text-gray-400">2 days ago</span>
+              </div>
+              <div class="flex text-amber-400 text-[10px] gap-0.5">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+              </div>
+              <p class="text-gray-600">Excellent product quality, fast shipping, and exactly as described in pictures!</p>
+            </div>
+          </div>
+        </div>
+        }
+
+        <!-- Tab 3: Shipping & Returns Content -->
+        @if (activeTab() === 'shipping') {
+        <div class="py-6 space-y-3 text-xs sm:text-sm text-gray-600">
+          <p><strong class="text-gray-900">Standard Delivery:</strong> Delivered within 24 to 48 hours.</p>
+          <p><strong class="text-gray-900">Free Delivery:</strong> All orders of 500 EGP or more qualify for 100% free delivery.</p>
+          <p><strong class="text-gray-900">14-Day Returns:</strong> If you are not completely satisfied, return the unopened product within 14 days for a full refund.</p>
+        </div>
+        }
+
+      </div>
+
+    </div>
+
+    <!-- "| You May Also Like" Related Products Section -->
+    @if (relatedProducts().length > 0) {
+    <div class="space-y-6 pt-4">
+      <div class="flex items-center gap-2.5">
+        <span class="w-1.5 h-6 bg-emerald-600 rounded-full inline-block"></span>
+        <h2 class="text-xl sm:text-2xl font-bold tracking-tight text-gray-900">
+          You May Also <span class="text-emerald-600">Like</span>
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+        @for (item of relatedProducts(); track item._id) {
+        <div [routerLink]="['/p-details', item._id]"
+          class="group bg-white border border-gray-100 hover:border-emerald-200 rounded-2xl p-3 sm:p-4 shadow-2xs hover:shadow-lg transition-all duration-300 flex flex-col justify-between cursor-pointer">
+          <div class="w-full aspect-square flex items-center justify-center overflow-hidden mb-3">
+            <img [src]="item.imageCover" [alt]="item.title"
+              class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300 mix-blend-multiply" />
+          </div>
+          <div class="space-y-1">
+            <span class="text-[11px] text-gray-400 block truncate">{{ item.category?.name }}</span>
+            <h3 class="text-xs sm:text-sm font-semibold text-gray-900 group-hover:text-emerald-600 transition-colors line-clamp-1">
+              {{ item.title }}
+            </h3>
+            <div class="flex items-center gap-1 text-xs text-amber-400">
+              <i class="fa-solid fa-star"></i>
+              <span class="text-gray-500 font-medium">{{ item.ratingsAverage }}</span>
+            </div>
+            <div class="flex items-center justify-between pt-2">
+              <span class="text-sm font-bold text-gray-900">{{ item.price }} EGP</span>
+              <button (click)="$event.stopPropagation(); p_id.set(item._id); addToCart()" type="button"
+                class="w-7 h-7 rounded-full bg-emerald-600 text-white flex items-center justify-center hover:bg-emerald-700 active:scale-95 cursor-pointer shadow-xs">
+                <i class="fa-solid fa-plus text-xs"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+    }
+
+  </div>
+</section>
+}

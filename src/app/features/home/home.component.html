@@ -1,0 +1,165 @@
+<!-- 1. Hero Slider -->
+<section class="w-full font-sans">
+  <app-home-slider />
+</section>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 space-y-8 font-sans">
+  <!-- 2. Value Proposition Feature Badges (4 Cards) -->
+  <section class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
+    <!-- Card 1: Free Shipping -->
+    <div
+      class="bg-white border border-gray-100 rounded-2xl p-4 sm:p-5 flex items-center gap-3.5 shadow-2xs hover:shadow-sm transition-shadow"
+    >
+      <div
+        class="w-11 h-11 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0"
+      >
+        <i class="fa-solid fa-truck text-lg"></i>
+      </div>
+      <div>
+        <h4 class="text-xs sm:text-sm font-bold text-gray-900 leading-tight">Free Shipping</h4>
+        <p class="text-[11px] sm:text-xs text-gray-500 mt-0.5">On orders over 500 EGP</p>
+      </div>
+    </div>
+
+    <!-- Card 2: Secure Payment -->
+    <div
+      class="bg-white border border-gray-100 rounded-2xl p-4 sm:p-5 flex items-center gap-3.5 shadow-2xs hover:shadow-sm transition-shadow"
+    >
+      <div
+        class="w-11 h-11 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0"
+      >
+        <i class="fa-solid fa-shield-halved text-lg"></i>
+      </div>
+      <div>
+        <h4 class="text-xs sm:text-sm font-bold text-gray-900 leading-tight">Secure Payment</h4>
+        <p class="text-[11px] sm:text-xs text-gray-500 mt-0.5">100% secure transactions</p>
+      </div>
+    </div>
+
+    <!-- Card 3: Easy Returns -->
+    <div
+      class="bg-white border border-gray-100 rounded-2xl p-4 sm:p-5 flex items-center gap-3.5 shadow-2xs hover:shadow-sm transition-shadow"
+    >
+      <div
+        class="w-11 h-11 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0"
+      >
+        <i class="fa-solid fa-rotate-left text-lg"></i>
+      </div>
+      <div>
+        <h4 class="text-xs sm:text-sm font-bold text-gray-900 leading-tight">Easy Returns</h4>
+        <p class="text-[11px] sm:text-xs text-gray-500 mt-0.5">14-day return policy</p>
+      </div>
+    </div>
+
+    <!-- Card 4: 24/7 Support -->
+    <div
+      class="bg-white border border-gray-100 rounded-2xl p-4 sm:p-5 flex items-center gap-3.5 shadow-2xs hover:shadow-sm transition-shadow"
+    >
+      <div
+        class="w-11 h-11 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0"
+      >
+        <i class="fa-solid fa-headset text-lg"></i>
+      </div>
+      <div>
+        <h4 class="text-xs sm:text-sm font-bold text-gray-900 leading-tight">24/7 Support</h4>
+        <p class="text-[11px] sm:text-xs text-gray-500 mt-0.5">Dedicated support team</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Shop By Category -->
+  <section>
+    <app-home-categories />
+  </section>
+
+  <!-- 4. Promo Banners (2 Cards Side by Side) -->
+  <section class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+    <!-- Banner 1: Green Gradient (Deal of the Day) -->
+    <div
+      class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-emerald-600 to-teal-700 text-white p-6 sm:p-8 shadow-sm flex flex-col justify-between min-h-[200px] group"
+    >
+      <!-- Decorative circle rings -->
+      <div
+        class="absolute -right-8 -top-8 w-44 h-44 rounded-full bg-white/10 blur-xl pointer-events-none"
+      ></div>
+      <div
+        class="absolute right-12 bottom-0 w-32 h-32 rounded-full bg-white/5 pointer-events-none"
+      ></div>
+
+      <div class="relative z-10 space-y-2">
+        <span
+          class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-white/20 backdrop-blur-xs text-emerald-100"
+        >
+          <i class="fa-solid fa-clock text-[10px]"></i>
+          Deal of the Day
+        </span>
+        <h3 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Fresh Organic Fruits</h3>
+        <p class="text-xs sm:text-sm text-emerald-100/90 font-medium max-w-sm">
+          Get up to 40% off on selected organic fruits
+        </p>
+      </div>
+
+      <div class="relative z-10 pt-4 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-baseline gap-2">
+          <span class="text-xl sm:text-2xl font-black">40% OFF</span>
+          <span class="text-xs text-emerald-200"
+            >Use code: <strong class="text-white tracking-wide">ORGANIC40</strong></span
+          >
+        </div>
+        <a
+          routerLink="/shop"
+          class="px-5 py-2.5 rounded-full bg-white text-emerald-700 hover:bg-emerald-50 text-xs sm:text-sm font-bold shadow-xs hover:shadow transition-all inline-flex items-center gap-1.5 active:scale-95"
+        >
+          <span>Shop Now</span>
+          <i class="fa-solid fa-arrow-right text-[11px]"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- Banner 2: Orange/Coral Gradient (New Arrivals) -->
+    <div
+      class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-orange-500 to-rose-500 text-white p-6 sm:p-8 shadow-sm flex flex-col justify-between min-h-[200px] group"
+    >
+      <!-- Decorative circle rings -->
+      <div
+        class="absolute -right-8 -top-8 w-44 h-44 rounded-full bg-white/10 blur-xl pointer-events-none"
+      ></div>
+      <div
+        class="absolute right-12 bottom-0 w-32 h-32 rounded-full bg-white/5 pointer-events-none"
+      ></div>
+
+      <div class="relative z-10 space-y-2">
+        <span
+          class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-white/20 backdrop-blur-xs text-orange-100"
+        >
+          <i class="fa-solid fa-sparkles text-[10px]"></i>
+          New Arrivals
+        </span>
+        <h3 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Exotic Vegetables</h3>
+        <p class="text-xs sm:text-sm text-orange-100/90 font-medium max-w-sm">
+          Discover our latest collection of premium vegetables
+        </p>
+      </div>
+
+      <div class="relative z-10 pt-4 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-baseline gap-2">
+          <span class="text-xl sm:text-2xl font-black">25% OFF</span>
+          <span class="text-xs text-orange-200"
+            >Use code: <strong class="text-white tracking-wide">FRESH25</strong></span
+          >
+        </div>
+        <a
+          routerLink="/shop"
+          class="px-5 py-2.5 rounded-full bg-white text-orange-600 hover:bg-orange-50 text-xs sm:text-sm font-bold shadow-xs hover:shadow transition-all inline-flex items-center gap-1.5 active:scale-95"
+        >
+          <span>Explore Now</span>
+          <i class="fa-solid fa-arrow-right text-[11px]"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Featured Products -->
+  <section>
+    <app-home-products />
+  </section>
+</div>

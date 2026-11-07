@@ -1,0 +1,387 @@
+<section class="min-h-[calc(100vh-140px)] bg-gray-50/60 py-6 sm:py-10 px-4 sm:px-6 lg:px-8 font-sans">
+  <div class="max-w-7xl mx-auto space-y-6">
+
+    <!-- Breadcrumb Navigation -->
+    <nav class="flex items-center gap-2 text-xs sm:text-sm text-gray-500" aria-label="Breadcrumb">
+      <a routerLink="/home" class="hover:text-emerald-600 transition-colors flex items-center gap-1.5">
+        <i class="fa-solid fa-house text-xs"></i>
+        <span>Home</span>
+      </a>
+      <span class="text-gray-300">/</span>
+      <span class="font-semibold text-gray-900">Shopping Cart</span>
+    </nav>
+
+    <!-- State 1: Active Cart with Items -->
+    @if (CartDetails().data && CartDetails().data.products.length > 0) {
+
+    <!-- Cart Header Bar -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-200/80">
+      <div class="flex items-center gap-3.5">
+        <div class="w-11 h-11 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shadow-xs shrink-0">
+          <i class="fa-solid fa-cart-shopping text-base"></i>
+        </div>
+        <div>
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
+            Shopping Cart
+          </h1>
+          <p class="text-xs sm:text-sm text-gray-500 mt-0.5">
+            You have <span class="font-bold text-emerald-600">{{ CartDetails().numOfCartItems }}</span> {{ CartDetails().numOfCartItems === 1 ? 'item' : 'items' }} in your Cart
+          </p>
+        </div>
+      </div>
+
+      <!-- Clear Cart Action Button -->
+      <button type="button" (click)="clearCart()"
+        class="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100 border border-red-200/80 px-4 py-2 rounded-xl transition-all active:scale-95 cursor-pointer shadow-2xs self-start sm:self-auto">
+        <i class="fa-regular fa-trash-can text-sm"></i>
+        <span>Clear all items</span>
+      </button>
+    </div>
+
+    <!-- Main Content Layout (Responsive 12-Column Grid) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+      <!-- Left Column: Products List (8 cols) -->
+      <div class="lg:col-span-8 space-y-4">
+
+        <!-- Free Delivery Progress Incentive Banner -->
+        <div class="bg-white rounded-2xl border border-gray-100 p-4 sm:p-5 shadow-2xs">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+              <i class="fa-solid fa-truck-fast text-base"></i>
+            </div>
+            <div class="flex-1 min-w-0">
+              @if (CartDetails().data.totalCartPrice >= 500) {
+              <p class="text-xs sm:text-sm font-bold text-gray-900 flex items-center gap-1.5">
+                <span>🎉 Free Shipping!</span>
+                <span class="text-emerald-600 font-extrabold">You qualify for free delivery</span>
+              </p>
+              } @else {
+              <p class="text-xs sm:text-sm font-medium text-gray-700">
+                Add <span class="font-bold text-emerald-600">{{ 500 - CartDetails().data.totalCartPrice }} EGP</span> more to qualify for <span class="font-bold text-gray-900">FREE Shipping</span>!
+              </p>
+              }
+
+              <!-- Visual Progress Bar -->
+              <div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden mt-2">
+                <div class="bg-emerald-500 h-full rounded-full transition-all duration-500"
+                  [style.width.%]="(CartDetails().data.totalCartPrice / 500) * 100 > 100 ? 100 : (CartDetails().data.totalCartPrice / 500) * 100">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product Items Cards -->
+        <div class="space-y-3.5">
+          @for (item of CartDetails().data.products; track item.product._id) {
+          <div class="bg-white rounded-2xl sm:rounded-3xl border border-gray-100 p-4 sm:p-5 shadow-2xs hover:shadow-sm transition-all duration-200">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
+
+              <!-- Product Thumbnail -->
+              <div class="relative w-24 h-24 sm:w-28 sm:h-28 bg-gray-50 rounded-2xl border border-gray-100 p-2 shrink-0 flex items-center justify-center overflow-hidden group">
+                <img [src]="item.product.imageCover" [alt]="item.product.title"
+                  class="w-full h-full object-contain mix-blend-multiply transition-transform duration-300 group-hover:scale-105" />
+              </div>
+
+              <!-- Product Info -->
+              <div class="flex-1 min-w-0 w-full sm:w-auto">
+                <div class="flex flex-wrap items-center gap-2 mb-1">
+                  <span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-100">
+                    {{ item.product.category?.name || "Groceries" }}
+                  </span>
+                  <span class="text-[11px] text-gray-400">
+                    SKU: {{ item.product._id.slice(-6).toUpperCase() }}
+                  </span>
+                </div>
+
+                <h3 class="text-base sm:text-lg font-bold text-gray-900 truncate" [title]="item.product.title">
+                  {{ item.product.title }}
+                </h3>
+
+                <div class="flex items-center gap-3 mt-1.5">
+                  <span class="text-xs sm:text-sm font-extrabold text-gray-900">
+                    {{ item.price }} EGP
+                  </span>
+                  <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> In Stock
+                  </span>
+                </div>
+
+                <!-- Mobile Actions (Quantity & Remove) -->
+                <div class="flex sm:hidden items-center justify-between mt-4 pt-3 border-t border-gray-100">
+                  <div class="inline-flex items-center border border-gray-200 rounded-xl bg-gray-50/70 p-0.5">
+                    <button type="button" (click)="updateCartCount(item.product._id, item.count - 1)"
+                      class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-500 hover:text-emerald-600 hover:bg-white transition-colors cursor-pointer"
+                      aria-label="Decrease quantity">
+                      <i class="fa-solid fa-minus text-[11px]"></i>
+                    </button>
+                    <span class="w-9 text-center font-bold text-sm text-gray-900 select-none">
+                      {{ item.count }}
+                    </span>
+                    <button type="button" (click)="updateCartCount(item.product._id, item.count + 1)"
+                      class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-500 hover:text-emerald-600 hover:bg-white transition-colors cursor-pointer"
+                      aria-label="Increase quantity">
+                      <i class="fa-solid fa-plus text-[11px]"></i>
+                    </button>
+                  </div>
+
+                  <div class="flex items-center gap-3">
+                    <span class="text-base font-bold text-gray-900">
+                      {{ item.price * item.count }} EGP
+                    </span>
+                    <button type="button" (click)="removeFromCart(item.product._id)"
+                      class="w-8 h-8 rounded-xl text-red-500 hover:bg-red-50 flex items-center justify-center transition-colors cursor-pointer"
+                      aria-label="Remove item">
+                      <i class="fa-regular fa-trash-can text-sm"></i>
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Desktop Actions (Quantity, Subtotal, Remove) -->
+              <div class="hidden sm:flex items-center gap-6 shrink-0 ms-auto">
+                <!-- Quantity Counter -->
+                <div class="inline-flex items-center border border-gray-200 rounded-xl bg-gray-50/70 p-0.5">
+                  <button type="button" (click)="updateCartCount(item.product._id, item.count - 1)"
+                    class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-500 hover:text-emerald-600 hover:bg-white transition-colors cursor-pointer"
+                    aria-label="Decrease quantity">
+                    <i class="fa-solid fa-minus text-[11px]"></i>
+                  </button>
+                  <span class="w-9 text-center font-bold text-sm text-gray-900 select-none">
+                    {{ item.count }}
+                  </span>
+                  <button type="button" (click)="updateCartCount(item.product._id, item.count + 1)"
+                    class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-500 hover:text-emerald-600 hover:bg-white transition-colors cursor-pointer"
+                    aria-label="Increase quantity">
+                    <i class="fa-solid fa-plus text-[11px]"></i>
+                  </button>
+                </div>
+
+                <!-- Subtotal -->
+                <div class="text-right min-w-[90px]">
+                  <div class="text-base font-extrabold text-gray-900">
+                    {{ item.price * item.count }} <span class="text-xs font-semibold text-emerald-600">EGP</span>
+                  </div>
+                </div>
+
+                <!-- Remove Button -->
+                <button type="button" (click)="removeFromCart(item.product._id)"
+                  class="w-9 h-9 rounded-xl text-gray-400 hover:text-red-600 hover:bg-red-50 flex items-center justify-center transition-all cursor-pointer"
+                  title="Remove item">
+                  <i class="fa-regular fa-trash-can text-base"></i>
+                </button>
+              </div>
+
+            </div>
+          </div>
+          }
+        </div>
+
+        <!-- Left Column Footer (Continue Shopping link) -->
+        <div class="pt-2 flex items-center justify-between">
+          <a routerLink="/shop"
+            class="inline-flex items-center gap-2 text-sm font-semibold text-emerald-600 hover:text-emerald-700 transition-colors">
+            <i class="fa-solid fa-arrow-left text-xs"></i>
+            <span>Continue Shopping</span>
+          </a>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Order Summary Card (4 cols) -->
+      <div class="lg:col-span-4">
+        <div class="sticky top-28 bg-white rounded-3xl border border-gray-100 shadow-xs overflow-hidden">
+          
+          <!-- Card Header (Green gradient banner matching Figma!) -->
+          <div class="bg-gradient-to-r from-emerald-600 to-teal-700 px-6 py-5 text-white">
+            <div class="flex items-center justify-between">
+              <h2 class="text-lg font-bold">Order Summary</h2>
+              <span class="text-xs font-medium bg-white/20 px-2.5 py-0.5 rounded-full">
+                {{ CartDetails().numOfCartItems }} {{ CartDetails().numOfCartItems === 1 ? 'item' : 'items' }}
+              </span>
+            </div>
+          </div>
+
+          <div class="p-5 sm:p-7 space-y-5">
+            <!-- Free Shipping Badge -->
+            <div class="p-3 bg-emerald-50 border border-emerald-100 rounded-2xl flex items-center gap-3">
+              <i class="fa-solid fa-truck text-emerald-600 text-sm"></i>
+              <div class="text-xs">
+                @if (CartDetails().data.totalCartPrice >= 500) {
+                <span class="font-bold text-emerald-800">Free Shipping!</span>
+                <span class="text-emerald-600 ml-1">You qualify for free delivery</span>
+                } @else {
+                <span class="font-bold text-gray-700">Orders over 500 EGP ship free!</span>
+                }
+              </div>
+            </div>
+
+            <!-- Price Breakdown -->
+            <div class="space-y-3 text-sm">
+              <div class="flex items-center justify-between text-gray-600">
+                <span>Subtotal</span>
+                <span class="font-bold text-gray-900">{{ CartDetails().data.totalCartPrice }} EGP</span>
+              </div>
+              <div class="flex items-center justify-between text-gray-600">
+                <span>Shipping</span>
+                <span class="font-bold text-emerald-600">
+                  @if (CartDetails().data.totalCartPrice >= 500) {
+                  FREE
+                  } @else {
+                  50 EGP
+                  }
+                </span>
+              </div>
+            </div>
+
+            <!-- Total Row -->
+            <div class="border-t border-gray-200/80 pt-4 flex items-baseline justify-between">
+              <div>
+                <span class="text-base font-bold text-gray-900">Total</span>
+                <p class="text-[11px] text-gray-400">Includes all taxes</p>
+              </div>
+              <div class="text-right">
+                <span class="text-2xl font-black text-gray-900">
+                  @if (CartDetails().data.totalCartPrice >= 500) {
+                  {{ CartDetails().data.totalCartPrice }}
+                  } @else {
+                  {{ CartDetails().data.totalCartPrice + 50 }}
+                  }
+                </span>
+                <span class="text-sm font-bold text-emerald-600 ml-1">EGP</span>
+              </div>
+            </div>
+
+            <!-- Promo Code Input Box -->
+            <div class="pt-2">
+              <label for="cart-coupon" class="block text-xs font-semibold text-gray-600 mb-1.5">
+                Apply Promo Code
+              </label>
+              @if (isGuest()) {
+                <p class="rounded-xl bg-gray-50 px-4 py-3 text-xs text-gray-500">Sign in to apply a promo code.</p>
+              } @else {
+              <div class="relative flex items-center">
+                <input #couponInput type="text" id="cart-coupon" placeholder="ORGANIC40"
+                  class="w-full pl-4 pr-20 py-2.5 text-xs sm:text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 uppercase tracking-wider text-gray-900 placeholder:text-gray-400" />
+                <button type="button" (click)="applyCoupon(couponInput.value)"
+                  class="absolute right-1 px-3 py-1.5 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-all cursor-pointer">
+                  Apply
+                </button>
+              </div>
+              }
+            </div>
+
+            <!-- Checkout Action Button -->
+            <div class="pt-2">
+              @if (isGuest()) {
+              <a routerLink="/login"
+                class="w-full bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white font-bold py-3.5 px-6 rounded-2xl flex items-center justify-center gap-2.5 shadow-sm hover:shadow-md transition-all cursor-pointer text-center text-sm sm:text-base">
+                <i class="fa-solid fa-user text-sm"></i>
+                <span>Sign in to Checkout</span>
+              </a>
+              } @else {
+              <a [routerLink]="['/payment', CartDetails().cartId]"
+                class="w-full bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white font-bold py-3.5 px-6 rounded-2xl flex items-center justify-center gap-2.5 shadow-sm hover:shadow-md transition-all cursor-pointer text-center text-sm sm:text-base">
+                <i class="fa-solid fa-lock text-sm"></i>
+                <span>Secure Checkout</span>
+              </a>
+              }
+            </div>
+
+            <!-- Trust Badges Under Checkout -->
+            <div class="flex items-center justify-center gap-6 text-xs text-gray-500 pt-2 border-t border-gray-100">
+              <div class="flex items-center gap-1.5">
+                <i class="fa-solid fa-shield-halved text-emerald-600"></i>
+                <span>Secure Payment</span>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <i class="fa-solid fa-truck text-emerald-600"></i>
+                <span>Fast Delivery</span>
+              </div>
+            </div>
+
+            <!-- Back to shopping -->
+            <div class="text-center pt-1">
+              <a routerLink="/shop" class="text-xs font-semibold text-emerald-600 hover:underline">
+                ← Continue Shopping
+              </a>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+    }
+
+    <!-- State 2: Empty Cart State -->
+    @else {
+    <div class="py-12 sm:py-20 text-center">
+      <div class="max-w-md mx-auto bg-white rounded-3xl border border-gray-100 p-8 sm:p-12 shadow-xs space-y-5">
+        <div class="w-20 h-20 mx-auto rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center">
+          <i class="fa-solid fa-cart-shopping text-3xl"></i>
+        </div>
+
+        <h2 class="text-2xl font-bold text-gray-900 tracking-tight">Your Cart is Empty</h2>
+        <p class="text-xs sm:text-sm text-gray-500 leading-relaxed">
+          Looks like you haven't added anything to your cart yet. Discover fresh groceries and daily essentials!
+        </p>
+
+        <div class="pt-2">
+          <a routerLink="/shop"
+            class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-sm transition-all active:scale-95">
+            <i class="fa-solid fa-bag-shopping text-sm"></i>
+            <span>Start Shopping</span>
+          </a>
+        </div>
+      </div>
+    </div>
+    }
+
+    <!-- Feature Badges Bar Before Footer -->
+    <div class="pt-10 sm:pt-14">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 border-t border-gray-200/80 pt-8">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+            <i class="fa-solid fa-truck text-xs"></i>
+          </div>
+          <div>
+            <h4 class="text-xs font-bold text-gray-900">Free Shipping</h4>
+            <p class="text-[10px] text-gray-500">On orders over 500 EGP</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+            <i class="fa-solid fa-rotate-left text-xs"></i>
+          </div>
+          <div>
+            <h4 class="text-xs font-bold text-gray-900">Easy Returns</h4>
+            <p class="text-[10px] text-gray-500">14-day return policy</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+            <i class="fa-solid fa-shield-halved text-xs"></i>
+          </div>
+          <div>
+            <h4 class="text-xs font-bold text-gray-900">Secure Payment</h4>
+            <p class="text-[10px] text-gray-500">100% secure checkout</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+            <i class="fa-solid fa-headset text-xs"></i>
+          </div>
+          <div>
+            <h4 class="text-xs font-bold text-gray-900">24/7 Support</h4>
+            <p class="text-[10px] text-gray-500">Dedicated help team</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>

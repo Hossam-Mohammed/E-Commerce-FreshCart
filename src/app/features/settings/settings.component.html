@@ -1,0 +1,492 @@
+<section class="min-h-screen bg-gray-50 font-sans">
+
+  <!-- Page Header Banner -->
+  <div class="bg-gradient-to-r from-emerald-500 to-emerald-700 text-white py-8 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto flex items-center gap-4">
+      <div class="w-14 h-14 rounded-full bg-white/20 backdrop-blur flex items-center justify-center shrink-0">
+        <i class="fa-regular fa-user text-2xl text-white"></i>
+      </div>
+      <div>
+        <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight">My Account</h1>
+        <p class="text-sm text-emerald-100/90">Manage your addresses and account settings</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Breadcrumb -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <nav class="flex items-center gap-2 text-xs text-gray-500">
+      <a routerLink="/home" class="hover:text-emerald-600 transition-colors flex items-center gap-1">
+        <i class="fa-solid fa-house text-xs"></i>
+        <span>Home</span>
+      </a>
+      <span class="text-gray-300">/</span>
+      <span class="font-semibold text-gray-900">My Account</span>
+    </nav>
+  </div>
+
+  <!-- Main layout: Sidebar + Content -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-14">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8 items-start">
+
+      <!-- ==== LEFT SIDEBAR ==== -->
+      <aside class="md:col-span-1">
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-2xs overflow-hidden">
+          <div class="px-5 py-4 border-b border-gray-100 font-bold text-gray-900 text-sm">
+            My Account
+          </div>
+          <nav class="py-2 text-sm font-medium">
+            <!-- My Addresses -->
+            <button
+              type="button"
+              (click)="activeTab.set('addresses')"
+              class="w-full flex items-center gap-3 px-5 py-3 text-left transition-colors cursor-pointer"
+              [class.text-emerald-600]="activeTab() === 'addresses'"
+              [class.bg-emerald-50]="activeTab() === 'addresses'"
+              [class.text-gray-700]="activeTab() !== 'addresses'"
+              [class.hover:bg-gray-50]="activeTab() !== 'addresses'"
+            >
+              <i class="fa-solid fa-location-dot w-4 text-center text-sm" [class.text-emerald-500]="activeTab() === 'addresses'" [class.text-gray-400]="activeTab() !== 'addresses'"></i>
+              <span>My Addresses</span>
+            </button>
+
+            <!-- Settings (Account) -->
+            <button
+              type="button"
+              (click)="activeTab.set('settings')"
+              class="w-full flex items-center gap-3 px-5 py-3 text-left transition-colors cursor-pointer"
+              [class.text-emerald-600]="activeTab() === 'settings'"
+              [class.bg-emerald-50]="activeTab() === 'settings'"
+              [class.text-gray-700]="activeTab() !== 'settings'"
+              [class.hover:bg-gray-50]="activeTab() !== 'settings'"
+            >
+              <i class="fa-solid fa-gear w-4 text-center text-sm" [class.text-emerald-500]="activeTab() === 'settings'" [class.text-gray-400]="activeTab() !== 'settings'"></i>
+              <span>Settings</span>
+            </button>
+          </nav>
+        </div>
+      </aside>
+
+      <!-- ==== RIGHT CONTENT ==== -->
+      <div class="md:col-span-3 space-y-6">
+
+        <!-- ============================================================ -->
+        <!-- SETTINGS TAB: Profile + Account Info + Change Password       -->
+        <!-- ============================================================ -->
+        @if (activeTab() === 'settings') {
+        <div class="space-y-6">
+
+          <!-- Section Title -->
+          <div>
+            <h2 class="text-lg sm:text-xl font-extrabold text-gray-900">Account Settings</h2>
+            <p class="text-xs sm:text-sm text-gray-500 mt-0.5">Update your profile information and change your password</p>
+          </div>
+
+          <!-- === Profile Information Card === -->
+          <div class="bg-white rounded-2xl border border-gray-100 shadow-2xs overflow-hidden">
+            <div class="flex items-center gap-3 px-6 py-4 border-b border-gray-100">
+              <div class="w-9 h-9 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                <i class="fa-regular fa-user text-sm"></i>
+              </div>
+              <div>
+                <h3 class="text-sm font-bold text-gray-900">Profile Information</h3>
+                <p class="text-xs text-gray-500">Update your personal details</p>
+              </div>
+            </div>
+
+            <form [formGroup]="profileForm" (ngSubmit)="submitProfile()" class="p-6 space-y-5">
+
+              <!-- Full Name -->
+              <div class="space-y-1.5">
+                <label for="fullName" class="block text-xs sm:text-sm font-semibold text-gray-700">
+                  Full Name <span class="text-red-500">*</span>
+                </label>
+                <input
+                  id="fullName"
+                  type="text"
+                  formControlName="name"
+                  placeholder="Username"
+                  class="w-full px-4 py-3 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 text-gray-900 placeholder-gray-400 transition-all"
+                  [class.border-red-400]="profileForm.get('name')?.invalid && profileForm.get('name')?.touched"
+                />
+                @if (profileForm.get('name')?.invalid && profileForm.get('name')?.touched) {
+                <p class="text-xs text-red-500 mt-1">Please enter your full name (at least 3 characters).</p>
+                }
+              </div>
+
+              <!-- Email Address -->
+              <div class="space-y-1.5">
+                <label for="settingsEmail" class="block text-xs sm:text-sm font-semibold text-gray-700">
+                  Email Address <span class="text-red-500">*</span>
+                </label>
+                <input
+                  id="settingsEmail"
+                  type="email"
+                  formControlName="email"
+                  placeholder="Enter your email"
+                  class="w-full px-4 py-3 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 text-gray-900 placeholder-gray-400 transition-all"
+                  [class.border-red-400]="profileForm.get('email')?.invalid && profileForm.get('email')?.touched"
+                />
+                @if (profileForm.get('email')?.invalid && profileForm.get('email')?.touched) {
+                <p class="text-xs text-red-500 mt-1">Please enter a valid email address.</p>
+                }
+              </div>
+
+              <!-- Phone Number -->
+              <div class="space-y-1.5">
+                <label for="settingsPhone" class="block text-xs sm:text-sm font-semibold text-gray-700">
+                  Phone Number <span class="text-red-500">*</span>
+                </label>
+                <input
+                  id="settingsPhone"
+                  type="tel"
+                  formControlName="phone"
+                  placeholder="01xxxxxxxxx"
+                  class="w-full px-4 py-3 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 text-gray-900 placeholder-gray-400 transition-all"
+                  [class.border-red-400]="profileForm.get('phone')?.invalid && profileForm.get('phone')?.touched"
+                />
+                @if (profileForm.get('phone')?.invalid && profileForm.get('phone')?.touched) {
+                <p class="text-xs text-red-500 mt-1">Please enter a valid Egyptian phone number (01xxxxxxxxx).</p>
+                }
+              </div>
+
+              <!-- Save Changes Button -->
+              <div class="pt-2">
+                <button
+                  type="submit"
+                  [disabled]="isProfileLoading() || profileForm.invalid"
+                  class="bg-emerald-600 hover:bg-emerald-700 disabled:opacity-70 disabled:cursor-not-allowed active:scale-95 text-white font-bold px-7 py-3 rounded-xl shadow-xs transition-all text-sm flex items-center gap-2 cursor-pointer"
+                >
+                  @if (isProfileLoading()) {
+                  <span class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                  <span>Saving...</span>
+                  } @else {
+                  <i class="fa-solid fa-floppy-disk"></i>
+                  <span>Save Changes</span>
+                  }
+                </button>
+              </div>
+
+            </form>
+          </div>
+
+          <!-- === Account Information Box === -->
+          <div class="bg-white rounded-2xl border border-gray-100 shadow-2xs overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-100">
+              <h3 class="text-sm font-bold text-gray-900">Account Information</h3>
+            </div>
+            <div class="p-6 space-y-4 text-sm">
+              <div class="flex items-center justify-between py-2 border-b border-gray-100">
+                <span class="text-gray-500 font-medium">User ID</span>
+                <span class="text-gray-900 font-bold text-xs font-mono break-all text-right max-w-xs">{{ userInfo().id || 'N/A' }}</span>
+              </div>
+              <div class="flex items-center justify-between py-2">
+                <span class="text-gray-500 font-medium">Role</span>
+                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 capitalize">
+                  {{ userInfo().role || 'User' }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- === Change Password Card === -->
+          <div class="bg-white rounded-2xl border border-gray-100 shadow-2xs overflow-hidden">
+            <div class="flex items-center gap-3 px-6 py-4 border-b border-gray-100">
+              <div class="w-9 h-9 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
+                <i class="fa-solid fa-lock text-sm"></i>
+              </div>
+              <div>
+                <h3 class="text-sm font-bold text-gray-900">Change Password</h3>
+                <p class="text-xs text-gray-500">Update your account password</p>
+              </div>
+            </div>
+
+            <form [formGroup]="passwordForm" (ngSubmit)="submitPasswordChange()" class="p-6 space-y-5">
+
+              <!-- Current Password -->
+              <div class="space-y-1.5">
+                <label for="currentPwd" class="block text-xs sm:text-sm font-semibold text-gray-700">
+                  Current Password <span class="text-red-500">*</span>
+                </label>
+                <div class="relative">
+                  <input
+                    id="currentPwd"
+                    [type]="showCurrent() ? 'text' : 'password'"
+                    formControlName="currentPassword"
+                    placeholder="Enter your current password"
+                    class="w-full px-4 py-3 pr-12 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 text-gray-900 placeholder-gray-400 transition-all"
+                    [class.border-red-400]="passwordForm.get('currentPassword')?.invalid && passwordForm.get('currentPassword')?.touched"
+                  />
+                  <button
+                    type="button"
+                    (click)="showCurrent.set(!showCurrent())"
+                    class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer"
+                  >
+                    <i [class]="showCurrent() ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye'" class="text-sm"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- New Password -->
+              <div class="space-y-1.5">
+                <label for="newPwd" class="block text-xs sm:text-sm font-semibold text-gray-700">
+                  New Password <span class="text-red-500">*</span>
+                </label>
+                <div class="relative">
+                  <input
+                    id="newPwd"
+                    [type]="showNew() ? 'text' : 'password'"
+                    formControlName="password"
+                    placeholder="Enter your new password"
+                    class="w-full px-4 py-3 pr-12 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 text-gray-900 placeholder-gray-400 transition-all"
+                    [class.border-red-400]="passwordForm.get('password')?.invalid && passwordForm.get('password')?.touched"
+                  />
+                  <button
+                    type="button"
+                    (click)="showNew.set(!showNew())"
+                    class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer"
+                  >
+                    <i [class]="showNew() ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye'" class="text-sm"></i>
+                  </button>
+                </div>
+                @if (passwordForm.get('password')?.invalid && passwordForm.get('password')?.touched) {
+                <p class="text-xs text-red-500 mt-1">Password must be at least 8 characters.</p>
+                }
+              </div>
+
+              <!-- Confirm New Password -->
+              <div class="space-y-1.5">
+                <label for="confirmPwd" class="block text-xs sm:text-sm font-semibold text-gray-700">
+                  Confirm New Password <span class="text-red-500">*</span>
+                </label>
+                <div class="relative">
+                  <input
+                    id="confirmPwd"
+                    [type]="showConfirm() ? 'text' : 'password'"
+                    formControlName="rePassword"
+                    placeholder="Confirm your new password"
+                    class="w-full px-4 py-3 pr-12 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 text-gray-900 placeholder-gray-400 transition-all"
+                    [class.border-red-400]="passwordForm.get('rePassword')?.invalid && passwordForm.get('rePassword')?.touched"
+                  />
+                  <button
+                    type="button"
+                    (click)="showConfirm.set(!showConfirm())"
+                    class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer"
+                  >
+                    <i [class]="showConfirm() ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye'" class="text-sm"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Submit Button -->
+              <div class="pt-2">
+                <button
+                  type="submit"
+                  [disabled]="isPasswordLoading() || passwordForm.invalid"
+                  class="bg-amber-500 hover:bg-amber-600 disabled:opacity-70 disabled:cursor-not-allowed active:scale-95 text-white font-bold px-7 py-3 rounded-xl shadow-xs transition-all text-sm flex items-center gap-2 cursor-pointer"
+                >
+                  @if (isPasswordLoading()) {
+                  <span class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                  <span>Changing...</span>
+                  } @else {
+                  <i class="fa-solid fa-lock"></i>
+                  <span>Change Password</span>
+                  }
+                </button>
+              </div>
+
+            </form>
+          </div>
+
+        </div>
+        }
+
+        <!-- ============================================================ -->
+        <!-- ADDRESSES TAB                                                 -->
+        <!-- ============================================================ -->
+        @if (activeTab() === 'addresses') {
+        <div class="space-y-6">
+
+          <!-- Section Title + Add button -->
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="text-lg sm:text-xl font-extrabold text-gray-900">My Addresses</h2>
+              <p class="text-xs sm:text-sm text-gray-500 mt-0.5">Manage your delivery addresses</p>
+            </div>
+            <button
+              type="button"
+              (click)="showAddressForm.set(!showAddressForm())"
+              class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold text-xs sm:text-sm shadow-xs transition-all cursor-pointer"
+            >
+              <i [class]="showAddressForm() ? 'fa-solid fa-xmark' : 'fa-solid fa-plus'" class="text-xs"></i>
+              <span>{{ showAddressForm() ? 'Cancel' : 'Add Address' }}</span>
+            </button>
+          </div>
+
+          <!-- Add Address Form (toggled) -->
+          @if (showAddressForm()) {
+          <div class="bg-white rounded-2xl border border-gray-100 shadow-2xs overflow-hidden">
+            <div class="flex items-center gap-3 px-6 py-4 border-b border-gray-100">
+              <div class="w-9 h-9 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                <i class="fa-solid fa-location-plus text-sm"></i>
+              </div>
+              <h3 class="text-sm font-bold text-gray-900">New Address</h3>
+            </div>
+
+            <form [formGroup]="addressForm" (ngSubmit)="submitAddress()" class="p-6 grid grid-cols-1 sm:grid-cols-2 gap-5">
+
+              <!-- Name / Label -->
+              <div class="sm:col-span-2 space-y-1.5">
+                <label class="block text-xs sm:text-sm font-semibold text-gray-700">
+                  Address Name / Label <span class="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  formControlName="name"
+                  placeholder="e.g. Home, Work, Parents"
+                  class="w-full px-4 py-3 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 text-gray-900 placeholder-gray-400 transition-all"
+                  [class.border-red-400]="addressForm.get('name')?.invalid && addressForm.get('name')?.touched"
+                />
+                @if (addressForm.get('name')?.invalid && addressForm.get('name')?.touched) {
+                <p class="text-xs text-red-500 mt-0.5">Please enter a name for this address.</p>
+                }
+              </div>
+
+              <!-- City -->
+              <div class="space-y-1.5">
+                <label class="block text-xs sm:text-sm font-semibold text-gray-700">
+                  City <span class="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  formControlName="city"
+                  placeholder="e.g. Cairo, Alexandria"
+                  class="w-full px-4 py-3 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 text-gray-900 placeholder-gray-400 transition-all"
+                  [class.border-red-400]="addressForm.get('city')?.invalid && addressForm.get('city')?.touched"
+                />
+                @if (addressForm.get('city')?.invalid && addressForm.get('city')?.touched) {
+                <p class="text-xs text-red-500 mt-0.5">City is required.</p>
+                }
+              </div>
+
+              <!-- Phone Number -->
+              <div class="space-y-1.5">
+                <label class="block text-xs sm:text-sm font-semibold text-gray-700">
+                  Phone Number <span class="text-red-500">*</span>
+                </label>
+                <input
+                  type="tel"
+                  formControlName="phone"
+                  placeholder="01xxxxxxxxx"
+                  class="w-full px-4 py-3 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 text-gray-900 placeholder-gray-400 transition-all"
+                  [class.border-red-400]="addressForm.get('phone')?.invalid && addressForm.get('phone')?.touched"
+                />
+                @if (addressForm.get('phone')?.invalid && addressForm.get('phone')?.touched) {
+                <p class="text-xs text-red-500 mt-0.5">Please enter a valid phone number.</p>
+                }
+              </div>
+
+              <!-- Street Address Details -->
+              <div class="sm:col-span-2 space-y-1.5">
+                <label class="block text-xs sm:text-sm font-semibold text-gray-700">
+                  Street Address <span class="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  formControlName="details"
+                  placeholder="Street name, building number, floor, apartment"
+                  class="w-full px-4 py-3 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 text-gray-900 placeholder-gray-400 transition-all"
+                  [class.border-red-400]="addressForm.get('details')?.invalid && addressForm.get('details')?.touched"
+                />
+                @if (addressForm.get('details')?.invalid && addressForm.get('details')?.touched) {
+                <p class="text-xs text-red-500 mt-0.5">Please enter full street address details.</p>
+                }
+              </div>
+
+              <!-- Submit -->
+              <div class="sm:col-span-2 pt-1">
+                <button
+                  type="submit"
+                  [disabled]="isAddressLoading() || addressForm.invalid"
+                  class="bg-emerald-600 hover:bg-emerald-700 disabled:opacity-70 disabled:cursor-not-allowed active:scale-95 text-white font-bold px-6 py-3 rounded-xl shadow-xs transition-all text-sm flex items-center gap-2 cursor-pointer"
+                >
+                  @if (isAddressLoading()) {
+                  <span class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                  <span>Adding...</span>
+                  } @else {
+                  <i class="fa-solid fa-check"></i>
+                  <span>Save Address</span>
+                  }
+                </button>
+              </div>
+
+            </form>
+          </div>
+          }
+
+          <!-- Addresses List -->
+          @if (addresses().length > 0) {
+          <div class="space-y-4">
+            @for (address of addresses(); track address._id) {
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-2xs p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+              <div class="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                <i class="fa-solid fa-location-dot text-base"></i>
+              </div>
+
+              <div class="flex-1 space-y-0.5 min-w-0">
+                <div class="flex items-center gap-2">
+                  <h4 class="font-bold text-gray-900 text-sm">{{ address.name }}</h4>
+                  @if ($index === 0) {
+                  <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-600">Default</span>
+                  }
+                </div>
+                <p class="text-xs text-gray-500 truncate">{{ address.details }}</p>
+                <div class="flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-500 pt-0.5">
+                  <span class="flex items-center gap-1">
+                    <i class="fa-solid fa-city text-gray-400 text-[10px]"></i>
+                    {{ address.city }}
+                  </span>
+                  <span class="flex items-center gap-1">
+                    <i class="fa-solid fa-phone text-gray-400 text-[10px]"></i>
+                    {{ address.phone }}
+                  </span>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                (click)="removeAddress(address._id)"
+                [disabled]="isDeletingAddress() === address._id"
+                class="shrink-0 w-9 h-9 rounded-xl bg-gray-50 hover:bg-red-50 text-gray-400 hover:text-red-500 flex items-center justify-center transition-colors cursor-pointer border border-gray-100 disabled:opacity-70"
+                title="Remove address"
+              >
+                @if (isDeletingAddress() === address._id) {
+                <span class="w-4 h-4 border-2 border-red-400 border-t-transparent rounded-full animate-spin"></span>
+                } @else {
+                <i class="fa-regular fa-trash-can text-sm"></i>
+                }
+              </button>
+            </div>
+            }
+          </div>
+          } @else {
+          <!-- Empty addresses state -->
+          <div class="bg-white rounded-2xl border border-gray-100 shadow-2xs p-10 text-center space-y-3">
+            <div class="w-14 h-14 mx-auto rounded-full bg-gray-50 flex items-center justify-center">
+              <i class="fa-solid fa-location-dot text-2xl text-gray-300"></i>
+            </div>
+            <h3 class="text-sm font-bold text-gray-700">No saved addresses yet</h3>
+            <p class="text-xs text-gray-500">Add an address to get faster checkout next time.</p>
+          </div>
+          }
+
+        </div>
+        }
+
+      </div>
+
+    </div>
+  </div>
+
+</section>
+

@@ -1,0 +1,21 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HomeSliderComponent } from './home-slider.component';
+
+describe('HomeSliderComponent', () => {
+  let component: HomeSliderComponent;
+  let fixture: ComponentFixture<HomeSliderComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [HomeSliderComponent],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(HomeSliderComponent);
+    component = fixture.componentInstance;
+    await fixture.whenStable();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});
